@@ -9,6 +9,20 @@ import (
 	"time"
 )
 
+func getNextSleep(today_times [5]time.Time) (time.Duration, error) {
+  now := time.Now()
+
+  var nextPrayer time.Time
+  for _, v := range today_times {
+    if v.Sub(now) > 0 {
+      nextPrayer = v
+      break;
+    }
+  }
+  // fmt.Println(nextPrayer)
+  
+  return nextPrayer.Sub(now), nil 
+}
 
 func parseTimings() (Timings, error) {
   timeStrings := prepareTimings()
@@ -26,9 +40,8 @@ func parseTimings() (Timings, error) {
       }
       timesArray[i] = parsedTime
     }
-    fmt.Println(timesArray)
+    timings.TimeTable[i] = timesArray
   }
-
 
   return timings, nil
 }
