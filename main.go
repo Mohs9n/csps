@@ -44,25 +44,25 @@ func main() {
 			if err != nil {
 				return err
 			}
-		} 
-    bkt = tx.Bucket(bktName)
-    if bkt == nil {
-      return fmt.Errorf("Bucket not there??")
-    }
-    timingsJson := bkt.Get(keyName)
-    var timings Timings
-    err = json.Unmarshal(timingsJson, &timings)
-    if err != nil {
-      return err
-    }
-    todayTimes = timings.TimeTable[now.Day() -1 ] 
+		}
+		bkt = tx.Bucket(bktName)
+		if bkt == nil {
+			return fmt.Errorf("Bucket not there??")
+		}
+		timingsJson := bkt.Get(keyName)
+		var timings Timings
+		err = json.Unmarshal(timingsJson, &timings)
+		if err != nil {
+			return err
+		}
+		todayTimes = timings.TimeTable[now.Day()-1]
 
 		return nil
 	})
 	if err != nil {
 		log.Fatalln(err)
 	}
-  sleep(todayTimes)
+	sleep(todayTimes)
 }
 
 func sleep(today_times [5]time.Time) {
