@@ -77,14 +77,15 @@ func prepareTimings() TimeStrings {
 func fetchTimings() TTByCity {
 	now := time.Now()
 	url := fmt.Sprintf("http://api.aladhan.com/v1/calendarByCity/%v/%v?city=Giza&country=Egypt", now.Year(), int(now.Month()))
-	log.Println(url)
 	resp, err := http.Get(url)
 	if err != nil {
+    log.Println("Error Fetching json")
 		log.Fatalln(err)
 	}
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
+    log.Println("Error reading json")
 		log.Fatalln(err)
 	}
 
@@ -95,6 +96,7 @@ func fetchTimings() TTByCity {
 	var ttbc TTByCity
 	err = json.Unmarshal(body, &ttbc)
 	if err != nil {
+    log.Println("Error Unmarshaling")
 		log.Fatalln(err)
 	}
 	return ttbc

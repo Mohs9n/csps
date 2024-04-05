@@ -31,6 +31,13 @@ func main() {
 				return fmt.Errorf("error creating bucket")
 			}
 
+		}
+		// bkt = tx.Bucket(bktName)
+		// if bkt == nil {
+		// 	return fmt.Errorf("Bucket not there??")
+		// }
+		timingsJson := bkt.Get(keyName)
+    if timingsJson == nil {
 			timings, err := parseTimings()
 			if err != nil {
 				return err
@@ -44,15 +51,12 @@ func main() {
 			if err != nil {
 				return err
 			}
-		}
-		bkt = tx.Bucket(bktName)
-		if bkt == nil {
-			return fmt.Errorf("Bucket not there??")
-		}
-		timingsJson := bkt.Get(keyName)
+      timingsJson = bkt.Get(keyName)
+    }
 		var timings Timings
 		err = json.Unmarshal(timingsJson, &timings)
 		if err != nil {
+      log.Println("Error Unmarshaling json from bucket")
 			return err
 		}
 		todayTimes = timings.TimeTable[now.Day()-1]
