@@ -4,7 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"os"
 	"os/exec"
+	"os/user"
 	"time"
 
 	bolt "go.etcd.io/bbolt"
@@ -13,7 +15,16 @@ import (
 func main() {
 	now := time.Now()
 
-	db, err := bolt.Open("/home/mohsen/src/go/csps/csps.db", 0600, nil)
+  user, err := user.Current()
+  if err != nil {
+    log.Fatalln(err)
+  }
+  // fmt.Println(fmt.Sprintf("%v/.local/share/csps.db", user.HomeDir))
+  if err:= os.Mkdir(fmt.Sprintf("%v/.local/share/csps", user.HomeDir), os.ModePerm); err != nil {
+    fmt.Println(err.(*os.PathError).Err)
+  }
+
+	db, err := bolt.Open(fmt.Sprintf("%v/.local/share/csps/csps.db", user.HomeDir), 0600, nil)
 	if err != nil {
 		log.Fatalln(err)
 	}
